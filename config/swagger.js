@@ -6,7 +6,7 @@ const options = {
     info: {
       title: 'API de Reservaciones - Restaurante',
       version: '1.0.0',
-      description: 'Documentación de la API para la gestión de mesas y reservaciones con autenticación JWT y roles.',
+      description: 'Documentación centralizada de la API para la gestión de mesas y reservaciones con roles.',
     },
     servers: [
       {
@@ -24,33 +24,59 @@ const options = {
         },
       },
     },
-    // Agregamos las rutas de forma manual y limpia aquí para evitar los crashes de identación
     paths: {
       "/api/auth/register": {
         "post": {
           "summary": "Registrar un nuevo cliente",
           "tags": ["Autenticación"],
-          "responses": { "201": { "description": "Usuario registrado exitosamente" } }
+          "responses": { "201": { "description": "Usuario creado" } }
         }
       },
       "/api/auth/login": {
         "post": {
-          "summary": "Iniciar sesión de usuario",
+          "summary": "Iniciar sesión (Obtener JWT)",
           "tags": ["Autenticación"],
-          "responses": { "200": { "description": "Login exitoso" } }
+          "responses": { "200": { "description": "Token generado" } }
         }
       },
       "/api/mesas": {
         "get": {
-          "summary": "Listar mesas disponibles",
+          "summary": "Obtener todas las mesas disponibles",
           "tags": ["Mesas"],
           "responses": { "200": { "description": "Lista de mesas" } }
+        },
+        "post": {
+          "summary": "Crear una nueva mesa (Admin)",
+          "tags": ["Mesas"],
+          "security": [{ "bearerAuth": [] }],
+          "responses": { "201": { "description": "Mesa creada" } }
+        }
+      },
+      "/api/reservaciones": {
+        "post": {
+          "summary": "Crear una reservación (Cliente)",
+          "tags": ["Reservaciones"],
+          "security": [{ "bearerAuth": [] }],
+          "responses": { "201": { "description": "Reservación exitosa" } }
+        },
+        "get": {
+          "summary": "Ver todas las reservaciones (Admin)",
+          "tags": ["Reservaciones"],
+          "security": [{ "bearerAuth": [] }],
+          "responses": { "200": { "description": "Listado completo" } }
+        }
+      },
+      "/api/reservaciones/mis": {
+        "get": {
+          "summary": "Ver mis propias reservaciones (Cliente)",
+          "tags": ["Reservaciones"],
+          "security": [{ "bearerAuth": [] }],
+          "responses": { "200": { "description": "Historial del cliente" } }
         }
       }
     }
   },
-  //  Ponemos un arreglo vacío aquí para que no intente escanear tus archivos de rutas y no colapse
-  apis: [], 
+  apis: [], // Evita que busque comentarios rotos en otros archivos
 };
 
 const swaggerSpec = swaggerJSDoc(options);
